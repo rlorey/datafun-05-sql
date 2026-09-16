@@ -14,16 +14,16 @@ type: software
 
 title: "datafun-05-sql"
 version: "1.1.0"
-date-released: "2026-08-20"
+date-released: "2026-09-16"
 
 authors:
-  - family-names: Case
-    given-names: Denise M.
+  - family-names: Lorey
+    given-names: Rebecca
     orcid: "https://orcid.org/0000-0001-6165-7389"
     affiliation: "Northwest Missouri State University, School of Computer Science and Information Systems, Maryville, MO, USA"
 
-repository-code: "https://github.com/denisecase/datafun-05-sql"
-url: "https://github.com/denisecase/datafun-05-sql"
+repository-code: "https://github.com/rlorey/datafun-05-sql"
+url: "https://github.com/rlorey/datafun-05-sql"
 license: MIT
 
 abstract: >
