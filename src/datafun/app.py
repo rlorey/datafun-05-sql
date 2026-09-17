@@ -98,7 +98,7 @@ DATABASE_FILE: Final[Path] = DATA_DIR / "business.sqlite"
 # === LOCATE THE CHART OUTPUT ===
 
 CHART_DIR: Final[Path] = Path("docs") / "images"
-CHART_PATH: Final[Path] = CHART_DIR / "first-chart.png"
+CHART_PATH: Final[Path] = CHART_DIR / "patients_by_clinic.png"
 
 # === DETERMINE WHAT ONE ROW REPRESENTS ===
 
