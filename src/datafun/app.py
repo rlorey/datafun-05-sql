@@ -102,9 +102,8 @@ CHART_PATH: Final[Path] = CHART_DIR / "first-chart.png"
 
 # === DETERMINE WHAT ONE ROW REPRESENTS ===
 
-REGION_GRAIN: Final[str] = "one business region"
-STORE_GRAIN: Final[str] = "one store"
-EMPLOYEE_GRAIN: Final[str] = "one employee"
+CLINIC_GRAIN: Final[str] = "one clinic"
+PATIENT_GRAIN: Final[str] = "one patient"
 
 # === DESCRIBE THE TABLE RELATIONSHIPS ===
 
@@ -123,13 +122,10 @@ The shared keys connect information stored in different tables.
 # === DEFINE THE ANALYTICAL QUESTION ===
 
 CUSTOM_QUERY_DECISION: Final[str] = r"""
-I want to compare the number of employees working at each store.
-The result should have one row per store.
+I want to compare number of patients at each clinic location.
+The result should have one row per patient.
 
-The information I need requires all three tables:
- - region name is in regions,
- - store name is in stores,
- - employee info is in employees.
+
 """
 
 # === WRITE THE SQL QUERY ===
@@ -151,16 +147,27 @@ ORDER BY
     employee_count DESC;
 """
 
+# CUSTOM: Create a query on the health data
+health_query = """
+    SELECT 
+        p.patient_id,
+        p.age,
+        p.age_group,
+        c.city,
+        c.clinic_name
+    FROM patient p
+    LEFT JOIN clinics c ON p.clinic_id = c.clinic_id
+    """
+
 # === CHOOSE A VISUALIZATION ===
 
 CUSTOM_CHART_DECISION: Final[str] = r"""
-The query result has one numeric value
-(employee count) for each store.
+The query result includes patient id and 
+clinic name. 
 
-A bar chart works for comparing
-a numeric value across named categories.
-Every pandas df has a
-plot.box() method for creating box plots.
+A bar chart will show number of unique patients
+at each clinic location.
+
 """
 
 
@@ -185,13 +192,26 @@ def main() -> None:
     LOG.info("01. LOAD the related tables.")
     LOG.info("-------------------------------")
 
-    log_path(LOG, "regions file", path=REGION_FILE)
-    log_path(LOG, "stores file", path=STORE_FILE)
-    log_path(LOG, "employees file", path=EMPLOYEE_FILE)
+    #log_path(LOG, "regions file", path=REGION_FILE)
+    #log_path(LOG, "stores file", path=STORE_FILE)
+    #log_path(LOG, "employees file", path=EMPLOYEE_FILE)
 
     regions_df: pd.DataFrame = pd.read_csv(REGION_FILE)
     stores_df: pd.DataFrame = pd.read_csv(STORE_FILE)
     employees_df: pd.DataFrame = pd.read_csv(EMPLOYEE_FILE)
+
+    
+    # CUSTOM: Log path to csv files
+    log_path(LOG, "clinic file", path=Path("data/health/clinic.csv"))
+    log_path(LOG, "lab results file", path=Path("data/health/lab_result.csv"))
+    log_path(LOG, "patient file", path=Path("data/health/patient.csv"))
+    log_path(LOG, "visit file", path=Path("data/health/visit.csv"))
+
+    # CUSTOM: Create dataframes for each csv using pandas
+    clinic_df: pd.DataFrame = pd.read_csv("data/health/clinic.csv")
+    lab_result_df: pd.DataFrame = pd.read_csv("data/health/lab_result.csv")
+    patient_df: pd.DataFrame = pd.read_csv("data/health/patient.csv")
+    visit_df: pd.DataFrame = pd.read_csv("data/health/visit.csv")
 
     LOG.info("Related tables loaded successfully.")
 
@@ -199,15 +219,15 @@ def main() -> None:
     LOG.info("02. INSPECT the grain and keys.")
     LOG.info("-------------------------------")
 
-    LOG.info(f"Regions grain: {REGION_GRAIN}")
-    LOG.info(f"Stores grain: {STORE_GRAIN}")
-    LOG.info(f"Employees grain: {EMPLOYEE_GRAIN}")
+    LOG.info(f"Clinic grain: {CLINIC_GRAIN}")
+    LOG.info(f"Patient grain: {PATIENT_GRAIN}")
+
 
     LOG.info(f"Regions columns: {regions_df.columns.tolist()}")
     LOG.info(f"Stores columns: {stores_df.columns.tolist()}")
-    LOG.info(f"Employees columns: {employees_df.columns.tolist()}")
+   
 
-    LOG.info(RELATIONSHIP_DECISION)
+    #LOG.info(RELATIONSHIP_DECISION)
 
     LOG.info("-------------------------------")
     LOG.info("03. CREATE a SQLite database.")
@@ -215,7 +235,15 @@ def main() -> None:
 
     log_path(LOG, "SQLite database", path=DATABASE_FILE)
 
+    #CUSTOM: Create SQL database
+    log_path(LOG, "SQLite database", path=Path("health.sqlite"))
+
     connection: sqlite3.Connection = sqlite3.connect(DATABASE_FILE)
+
+    # CUSTOM: Create SQL connection to health database
+    health_conn: sqlite3.Connection = sqlite3.connect("health.sqlite")
+    
+  
 
     LOG.info("SQLite database connection created.")
 
@@ -251,36 +279,86 @@ def main() -> None:
     LOG.info("-------------------------------")
 
     LOG.info(CUSTOM_QUERY_DECISION)
-    LOG.info(f"\nSQL query:\n{CUSTOM_SQL_QUERY}")
+    #LOG.info(f"\nSQL query:\n{CUSTOM_SQL_QUERY}")
+
+    # CUSTOM: Print health query
+    LOG.info(f"\nSQL query:\n{health_query}")
 
     result_df: pd.DataFrame = pd.read_sql_query(
         CUSTOM_SQL_QUERY,
         connection,
     )
+    # 1. Write the dataframe to SQLite with an explicit table name
+    patient_df.to_sql("patient", health_conn, if_exists="replace", index=False)
+    # Write each dataframe to SQLite so the tables actually exist in the database file
+    clinic_df.to_sql("clinics", health_conn, if_exists="replace", index=False)
+    patient_df.to_sql("patient", health_conn, if_exists="replace", index=False)
 
-    LOG.info(f"\nQuery result:\n{result_df}")
+    # CUSTOM: Execute query into a pandas DataFrame
+    health_df = pd.read_sql_query(health_query, health_conn)
 
+    # CUSTOM: Show first 5 rows
+    top_five_df = health_df.head(5)
+
+    # CUSTOM: Export the first five rows to a text file
+    top_five_df.to_string("health_top_five.txt", index=False)
+
+    # LOG.info(f"\nQuery result:\n{result_df}")
+
+    # CUSTOM: Print first five rows of queried table to terminal
+    LOG.info(f"\nQuery result:\n{top_five_df}")
+
+    # CUSTOM: Log the successful text file creation
+    file_path = "health_top_five.txt"
+    LOG.info(f"Successfully created text export at: {file_path}")
+
+    # Using your custom logger or standard print statement
     LOG.info("-------------------------------")
     LOG.info("06. VISUALIZE the query result with Python.")
     LOG.info("-------------------------------")
 
     LOG.info(CUSTOM_CHART_DECISION)
 
-    employee_ax = result_df.plot.bar(
-        x="store_name",
-        y="employee_count",
-        legend=False,
-    )
+    # CUSTOM: Create plot of number of patients at each clinic location
+    # Count unique patients per clinic directly from your dataframe
+    location_counts = health_df["clinic_name"].value_counts()
 
-    # CUSTOM: The analyst can customize the returned Matplotlib Axes object.
-    employee_ax.set_title("Employees by Store")
-    employee_ax.set_xlabel("Store")
-    employee_ax.set_ylabel("Number of Employees")
+    # Create the plot
+    # Create the plot and capture the axes object as health_ax
+    plt.figure(figsize=(10, 6))
+    health_ax = location_counts.plot(kind="bar", color="#4C8C61", edgecolor="black")
+
+    plt.title("Patient Count per Clinic", fontsize=14, fontweight="bold")
+    plt.xlabel("Clinic Location", fontsize=12)
+    plt.ylabel("Number of Patients", fontsize=12)
+    plt.xticks(rotation=45, ha="right")
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.tight_layout()
+
+    # Save using your custom toolkit function
+    save_chart(health_ax, CHART_PATH)
+    plt.show()
+
+
+
+    #employee_ax = result_df.plot.bar(
+    #    x="store_name",
+    #    y="employee_count",
+    #    legend=False,
+    #)
+
+    # The analyst can customize the returned Matplotlib Axes object.
+    #employee_ax.set_title("Employees by Store")
+    #employee_ax.set_xlabel("Store")
+    #employee_ax.set_ylabel("Number of Employees")
+
+    # CUSTOM: Create plot and assign the axes variable name
+
 
     CHART_DIR.mkdir(parents=True, exist_ok=True)
 
     save_chart(
-        employee_ax,
+        health_ax,
         CHART_PATH,
     )
 
@@ -297,13 +375,11 @@ def main() -> None:
 
     LOG.info(r"""CUSTOM OBSERVATIONS:
     The SQL query connected information from
-    the regions, stores, and employees tables.
+    patient and clinic tables.
 
-    The result has one row per store.
+    The result has one row per patient.
 
-    I observed ...
-
-    Based on this result, I would next like to explore ...
+    The fewest patients were at Central Clinic. 
     """)
 
     LOG.info("-------------------------------")

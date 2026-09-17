@@ -1,4 +1,4 @@
-lab_result_id,visit_id,test_name,result_value,unit
+t_id,test_name,result_vlab_result_id,visialue,unit
 3001,2002,Vitamin D,36.0,ng/mL
 3002,2003,Glucose,74.9,mg/dL
 3003,2003,Total Cholesterol,187.6,mg/dL
