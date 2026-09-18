@@ -48,7 +48,7 @@ The health data pipeline goes beyond static database storage by integrating reac
   - [**Reactive App (marimo)**](https://github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py)
   - run the analysis interactively in a browser
 
-- [**Reactive Notebook (marimo)**](./src/datafun/notebook.py)
+- [**Reactive Notebook (marimo)**](https://github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py))
   - view the Python source used to create the reactive app
 
 ## Initial Results
