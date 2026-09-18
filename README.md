@@ -1,6 +1,5 @@
 # datafun-05-sql
 
-[![Workflow Guide](https://img.shields.io/badge/Pro--Guide-pro--analytics--02-green)](https://denisecase.github.io/pro-analytics-02/workflow-b-apply-example-project/)
 [![Python 3.14](https://img.shields.io/badge/python-3.14%2B-blue?logo=python)](./pyproject.toml)
 [![uv managed](https://img.shields.io/badge/uv-managed-DE5FE9)](https://docs.astral.sh/uv/)
 [![ty type checked](https://img.shields.io/badge/ty-type_checked-2F80ED)](https://docs.astral.sh/ty/)
@@ -9,16 +8,15 @@
 [![Zensical docs](https://img.shields.io/badge/Zensical-docs-purple)](https://zensical.org/)
 [![MIT](https://img.shields.io/badge/license-see%20LICENSE-yellow.svg)](./LICENSE)
 
-> Professional Python project: relational data and SQL analytics with a marimo app
-> for parameterized queries (e.g. choose a region to update the chart)
+## About the Project
 
-Notebooks combine narration and code.
-This project works on **related tabular data files** using SQL and Python.
-It includes a reactive marimo app for interacting with the related data.
+This project implements a complete **Extract, Transform, Load (ETL)** pipeline and reactive analytics dashboard designed for health data management. It bridges traditional relational database operations with modern, browser-capable interactive data exploration.
 
-## Health Data Insights & SQL Queries
-
-The ETL pipeline loads structured health data into a local SQLite database (`health.sqlite`), enabling efficient relational querying across multiple tables.
+### Key Highlights
+* **Relational Database Engineering:** Ingests raw structured health data (`clinics`, `patients`, `lab_results`, `visits`) into a robust local SQLite database (`health.sqlite`).
+* **Advanced Querying & Aggregation:** Executes precise SQL queries using table aliases and joins to analyze metrics such as unique patient distributions across clinic locations.
+* **Interactive Reactive Notebooks:** Incorporates **Marimo** (`clinic_analysis.py`) to provide dynamic UI components, sliders, and real-time data filtering.
+* **Reproducible Documentation:** Features clickable workflow links, automated asset generation, and browser-executable Marimo previews to ensure seamless sharing and evaluation.
 
 ### Key Query Example: Unique Patients per Clinic Location
 To analyze patient distribution across clinics, the pipeline performs an aggregation query using table aliases for clean join syntax:
@@ -33,19 +31,10 @@ To analyze patient distribution across clinics, the pipeline performs an aggrega
     FROM patient p
     LEFT JOIN clinics c ON p.clinic_id = c.clinic_id
 ```
-## Health Data Analysis & Interactive Notebooks
-
-The health data pipeline goes beyond static database storage by integrating reactive Python notebooks built with **Marimo** for dynamic data exploration.
-
-### Pipeline Workflow & Features
-* **ETL Pipeline:** Ingests raw CSVs (`clinics`, `patients`, `lab_results`, `visits`) into a structured SQLite database (`health.sqlite`).
-* **Relational Querying:** Aggregates unique patient counts per clinic location using clean SQL joins and filtering.
-* **Reactive Notebooks:** Utilizes Marimo notebooks to analyze health dataset characteristics using interactive UI components like sliders.
-* **Automated Visualizations:** Renders custom-styled charts and saves assets directly to `docs/images/` for repository documentation.
 
 ## Produced Artifacts
 
-  - [**Reactive App (marimo)**](https://github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py)
+- [**Run App Interactively in Browser**](https://marimo.app/github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py)
   - run the analysis interactively in a browser
 
 - [**Reactive Notebook (marimo)**](https://github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py))
@@ -55,7 +44,7 @@ The health data pipeline goes beyond static database storage by integrating reac
 
 ![One analyst-selected chart](docs/images/first-chart.png)
 
-![Marimo reactive app preview](docs/images/marimo-local-preview.png)
+![Marimo reactive app preview](docs/images/clinics-local-preview.png)
 
 ## Important Folders and Files
 
@@ -65,19 +54,6 @@ The health data pipeline goes beyond static database storage by integrating reac
 - **src/datafun/** - project logic
 - **zensical.toml** - update documentation site metadata
 
-## Common Workflow
-
-Follow the
-[step-by-step workflow guide](https://denisecase.github.io/pro-analytics-02/workflow-b-apply-example-project/)
-carefully.
-
-## Challenges
-
-Challenges are expected.
-Sometimes instructions may not quite match your operating system.
-When issues occur, share screenshots, error messages,
-and details about what you tried.
-Working through issues is part of implementing professional projects.
 
 ## Success
 
@@ -177,16 +153,6 @@ git push -u origin main
   to scroll through past commands.
 - Use `CTRL+f` to find (and replace) text within a file.
 
-## Much Can Be Ignored
-
-- You do not need to add to or modify `tests/`.
-  Tests are recommended and provided for example only.
-- Many files are silent helpers.
-  [Explore](https://denisecase.github.io/professional-python-project-explainer/)
-  as you like, but most files are never touched.
-- You do NOT need to understand everything;
-  let understanding build over time.
-
 ## As Needed
 
 If VS Code does not automatically use the new `.venv` environment:
@@ -209,11 +175,8 @@ Press `Ctrl c` (both keys together) or `Ctrl+Z` then `Enter` on Windows.
 
 ## Documentation
 
-- [Documentation](https://denisecase.github.io/datafun-05-sql/)
+- [Documentation](https://rlorey.github.io/datafun-05-sql/)
 
-## Data Card
-
-- [Palmer Penguins Data Card](./docs/data-card.md)
 
 ## Annotations
 
