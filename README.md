@@ -16,44 +16,34 @@ Notebooks combine narration and code.
 This project works on **related tabular data files** using SQL and Python.
 It includes a reactive marimo app for interacting with the related data.
 
-Note: With marimo, analysts can build interactive web apps!
-It's a whole new skill set, and not easy, but it does create
-engaging reports that showcase your analytic skills.
+## Health Data Insights & SQL Queries
 
-## Motivation
+The ETL pipeline loads structured health data into a local SQLite database (`health.sqlite`), enabling efficient relational querying across multiple tables.
 
-We've mostly worked with data stored in files.
-Organizations often keep larger collections of related data in databases,
-where we can ask for the information we need
-instead of loading everything at once.
+### Key Query Example: Unique Patients per Clinic Location
+To analyze patient distribution across clinics, the pipeline performs an aggregation query using table aliases for clean join syntax:
 
-In this project, we'll use SQL to ask questions of data stored in a database.
-We'll select useful records, filter and organize results,
-summarize groups, and combine related information
-so it can be used in further analysis.
+```sql
+  SELECT 
+        p.patient_id,
+        p.age,
+        p.age_group,
+        c.city,
+        c.clinic_name
+    FROM patient p
+    LEFT JOIN clinics c ON p.clinic_id = c.clinic_id
+```
+## Health Data Analysis & Interactive Notebooks
 
-## This Project
+The health data pipeline goes beyond static database storage by integrating reactive Python notebooks built with **Marimo** for dynamic data exploration.
 
-This project introduces **relational data and SQL**
-used when storing structured data in tables.
-Analysts are typically highly skilled at both SQL and Python.
-
-Sample datasets are provided in the `data/raw` folder
-across several topic domains:
-
-- **retail** - with regions / stores / employees (the worked example)
-- **library** - with state / branch / books
-- **health** - with clinic / patient / visit
-- **movies** - using the **MovieLens** small dataset
-
-Each domain has related tables.
-Run the retail example,
-and implement a similar project either by expanding the retail work,
-or choosing one of the other recommended domains.
+### Pipeline Workflow & Features
+* **ETL Pipeline:** Ingests raw CSVs (`clinics`, `patients`, `lab_results`, `visits`) into a structured SQLite database (`health.sqlite`).
+* **Relational Querying:** Aggregates unique patient counts per clinic location using clean SQL joins and filtering.
+* **Reactive Notebooks:** Utilizes Marimo notebooks to analyze health dataset characteristics using interactive UI components like sliders.
+* **Automated Visualizations:** Renders custom-styled charts and saves assets directly to `docs/images/` for repository documentation.
 
 ## Produced Artifacts
-
-This project produces the same results in several useful forms.
 
 - [**Reactive App (marimo)**](https://denisecase.github.io/datafun-05-sql/app/)
   - run the analysis interactively in a browser
