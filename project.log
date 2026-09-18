@@ -3229,3 +3229,100 @@ at each clinic location.
 2026-09-17 14:21:54 | INFO | P05 | ===================================
 2026-09-17 14:21:54 | INFO | P05 | END main() - Executed successfully!
 2026-09-17 14:21:54 | INFO | P05 | ===================================
+2026-09-18 12:21:41 | INFO | P05 | === RUN START ===
+2026-09-18 12:21:41 | INFO | P05 | project=P05 - PYTHON AND SQL
+2026-09-18 12:21:41 | INFO | P05 | repo_dir=datafun-05-sql
+2026-09-18 12:21:41 | INFO | P05 | python=3.14.7
+2026-09-18 12:21:41 | INFO | P05 | os=Darwin 23.5.0
+2026-09-18 12:21:41 | INFO | P05 | shell=zsh
+2026-09-18 12:21:41 | INFO | P05 | cwd=.
+2026-09-18 12:21:41 | INFO | P05 | github_actions=False
+2026-09-18 12:21:41 | INFO | P05 | ===================================
+2026-09-18 12:21:41 | INFO | P05 | START main()
+2026-09-18 12:21:41 | INFO | P05 | ===================================
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 01. LOAD the related tables.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | clinic file = data/health/clinic.csv
+2026-09-18 12:21:41 | INFO | P05 | lab results file = data/health/lab_result.csv
+2026-09-18 12:21:41 | INFO | P05 | patient file = data/health/patient.csv
+2026-09-18 12:21:41 | INFO | P05 | visit file = data/health/visit.csv
+2026-09-18 12:21:41 | INFO | P05 | Related tables loaded successfully.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 02. INSPECT the grain and keys.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | Clinic grain: one clinic
+2026-09-18 12:21:41 | INFO | P05 | Patient grain: one patient
+2026-09-18 12:21:41 | INFO | P05 | Regions columns: ['region_id', 'region_name']
+2026-09-18 12:21:41 | INFO | P05 | Stores columns: ['store_id', 'store_name', 'region_id', 'store_type', 'square_feet']
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 03. CREATE a SQLite database.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | SQLite database = data/retail/business.sqlite
+2026-09-18 12:21:41 | INFO | P05 | SQLite database = health.sqlite
+2026-09-18 12:21:41 | INFO | P05 | SQLite database connection created.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 04. LOAD the tables into SQLite.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | Related tables loaded into SQLite.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 05. QUERY across related tables with SQL.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 
+I want to compare number of patients at each clinic location.
+The result should have one row per patient.
+
+
+
+2026-09-18 12:21:41 | INFO | P05 | 
+SQL query:
+
+    SELECT 
+        p.patient_id,
+        p.age,
+        p.age_group,
+        c.city,
+        c.clinic_name
+    FROM patient p
+    LEFT JOIN clinics c ON p.clinic_id = c.clinic_id
+    
+2026-09-18 12:21:41 | INFO | P05 | 
+Query result:
+   patient_id  age age_group        city       clinic_name
+0        1001   71       65+  Brookfield  Northside Clinic
+1        1002   81       65+  Brookfield  Northside Clinic
+2        1003   26     18-34  Brookfield  Northside Clinic
+3        1004   30     18-34  Brookfield  Northside Clinic
+4        1005   51     50-64  Brookfield  Northside Clinic
+2026-09-18 12:21:41 | INFO | P05 | Successfully created text export at: health_top_five.txt
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 06. VISUALIZE the query result with Python.
+2026-09-18 12:21:41 | INFO | P05 | -------------------------------
+2026-09-18 12:21:41 | INFO | P05 | 
+The query result includes patient id and 
+clinic name. 
+
+A bar chart will show number of unique patients
+at each clinic location.
+
+
+2026-09-18 12:21:45 | INFO | P05 | Chart saved successfully at docs/images/patients_by_clinic.png.
+2026-09-18 12:21:45 | INFO | P05 | -------------------------------
+2026-09-18 12:21:45 | INFO | P05 | 07. SUMMARIZE what you found.
+2026-09-18 12:21:45 | INFO | P05 | -------------------------------
+2026-09-18 12:21:45 | INFO | P05 | CUSTOM OBSERVATIONS:
+    The SQL query connected information from
+    patient and clinic tables.
+
+    The result has one row per patient.
+
+    The fewest patients were at Central Clinic. 
+    
+2026-09-18 12:21:45 | INFO | P05 | -------------------------------
+2026-09-18 12:21:45 | INFO | P05 | 08. DISPLAY the visualization.
+2026-09-18 12:21:45 | INFO | P05 | -------------------------------
+2026-09-18 12:21:45 | INFO | P05 | In a script, call plt.show() at the end to display all charts.
+2026-09-18 12:21:45 | INFO | P05 | Close all chart windows (with the close button) to continue.
+2026-09-18 12:21:45 | INFO | P05 | ===================================
+2026-09-18 12:21:45 | INFO | P05 | END main() - Executed successfully!
+2026-09-18 12:21:45 | INFO | P05 | ===================================
