@@ -34,7 +34,7 @@ To analyze patient distribution across clinics, the pipeline performs an aggrega
 
 ## Produced Artifacts
 
-[![Marimo reactive app preview](docs/images/marimo-local-preview.png)](https://marimo.app/github.com/rlorey/datafun-05-sql/raw/main/src/datafun/clinic_analysis.py)
+[![Marimo reactive app preview](docs/images/clinics-local-preview.png)](https://marimo.app/github.com/rlorey/datafun-05-sql/raw/main/src/datafun/clinic_analysis.py)
   - run the analysis interactively in a browser
 
 - [**Reactive Notebook (marimo)**](https://github.com/rlorey/datafun-05-sql/blob/main/src/datafun/clinic_analysis.py))
