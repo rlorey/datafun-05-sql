@@ -41,8 +41,6 @@ To analyze patient distribution across clinics, the pipeline performs an aggrega
 
 ![One analyst-selected chart](docs/images/first-chart.png)
 
-![Marimo reactive app preview](docs/images/clinics-local-preview.png)
-
 ## Important Folders and Files
 
 - **data/*** - raw CSV input files
