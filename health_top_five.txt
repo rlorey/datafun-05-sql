@@ -1,0 +1,6 @@
+ patient_id  age age_group       city      clinic_name
+       1001   71       65+ Brookfield Northside Clinic
+       1002   81       65+ Brookfield Northside Clinic
+       1003   26     18-34 Brookfield Northside Clinic
+       1004   30     18-34 Brookfield Northside Clinic
+       1005   51     50-64 Brookfield Northside Clinic
