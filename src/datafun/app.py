@@ -1,7 +1,7 @@
 """src/datafun/app.py - Project script.
 
-Author: Denise Case
-Date: 2026-08
+Author: Rebecca Lorey
+Date: 2026-09
 
 HOW TO RUN THIS FILE:
 
@@ -13,18 +13,6 @@ to run this file as a script:
 
 uv run python -m datafun.app
 
-DOMAIN:
-
-A small business with regions, stores, and employees.
-
-The data is stored in three related CSV files:
-
-- one row per region
-- one row per store
-- one row per employee
-
-One region can have many stores.
-One store can have many employees.
 
 EXPLORE:
 
@@ -96,12 +84,12 @@ EMPLOYEE_FILE: Final[Path] = DATA_DIR / "employee.csv"
 DATABASE_FILE: Final[Path] = DATA_DIR / "business.sqlite"
 
 # === LOCATE THE CHART OUTPUT ===
-
+# CUSTOM: Create filepath for plot
 CHART_DIR: Final[Path] = Path("docs") / "images"
 CHART_PATH: Final[Path] = CHART_DIR / "patients_by_clinic.png"
 
 # === DETERMINE WHAT ONE ROW REPRESENTS ===
-
+# CUSTOM: Indicate grain in two tables
 CLINIC_GRAIN: Final[str] = "one clinic"
 PATIENT_GRAIN: Final[str] = "one patient"
 
@@ -120,7 +108,7 @@ The shared keys connect information stored in different tables.
 """
 
 # === DEFINE THE ANALYTICAL QUESTION ===
-
+# CUSTOM: Health question to be answered by query
 CUSTOM_QUERY_DECISION: Final[str] = r"""
 I want to compare number of patients at each clinic location.
 The result should have one row per patient.
@@ -147,7 +135,7 @@ ORDER BY
     employee_count DESC;
 """
 
-# CUSTOM: Create a query on the health data
+# CUSTOM: Query on the health data
 health_query = """
     SELECT 
         p.patient_id,
@@ -160,7 +148,7 @@ health_query = """
     """
 
 # === CHOOSE A VISUALIZATION ===
-
+# CUSTOM: Chart reasoning and type
 CUSTOM_CHART_DECISION: Final[str] = r"""
 The query result includes patient id and 
 clinic name. 
@@ -288,11 +276,9 @@ def main() -> None:
         CUSTOM_SQL_QUERY,
         connection,
     )
-    # 1. Write the dataframe to SQLite with an explicit table name
+    # CUSTOM: Write each dataframe to SQLite so the tables exist in the database file
     patient_df.to_sql("patient", health_conn, if_exists="replace", index=False)
-    # Write each dataframe to SQLite so the tables actually exist in the database file
     clinic_df.to_sql("clinics", health_conn, if_exists="replace", index=False)
-    patient_df.to_sql("patient", health_conn, if_exists="replace", index=False)
 
     # CUSTOM: Execute query into a pandas DataFrame
     health_df = pd.read_sql_query(health_query, health_conn)
@@ -319,12 +305,11 @@ def main() -> None:
 
     LOG.info(CUSTOM_CHART_DECISION)
 
-    # CUSTOM: Create plot of number of patients at each clinic location
-    # Count unique patients per clinic directly from your dataframe
+    # CUSTOM: Count unique patients per clinic directly from your dataframe
     location_counts = health_df["clinic_name"].value_counts()
 
-    # Create the plot
-    # Create the plot and capture the axes object as health_ax
+    # Create plot of number of patients at each clinic location
+    # capture the axes object as health_ax
     plt.figure(figsize=(10, 6))
     health_ax = location_counts.plot(kind="bar", color="#4C8C61", edgecolor="black")
 
@@ -335,7 +320,7 @@ def main() -> None:
     plt.grid(axis="y", linestyle="--", alpha=0.7)
     plt.tight_layout()
 
-    # Save using your custom toolkit function
+    # Save chart
     save_chart(health_ax, CHART_PATH)
     plt.show()
 
@@ -373,6 +358,7 @@ def main() -> None:
     # Then record your CUSTOM observations
     # in a simple multi-line raw string.
 
+    #CUSTOM: Observations from SQL query
     LOG.info(r"""CUSTOM OBSERVATIONS:
     The SQL query connected information from
     patient and clinic tables.
