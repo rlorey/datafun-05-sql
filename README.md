@@ -90,10 +90,6 @@ code .
 
 ### In a VS Code terminal
 
-These are listed for convenience.
-For best results, follow the detailed instructions in
-[pro-analytics-02 guide](https://denisecase.github.io/pro-analytics-02/).
-
 Use VS Code menu option `Terminal` / `New Terminal` to open a **VS Code terminal**
 in the root project folder.
 Copy each command, paste into your terminal, and hit ENTER,
